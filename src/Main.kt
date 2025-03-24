@@ -2,9 +2,9 @@
  * =====================================================================
  * Programming Project for NCEA Level 3, Standard 91906
  * ---------------------------------------------------------------------
- * Project Name:   PROJECT NAME HERE
+ * Project Name: Last Breath
  * Project Author: James Black
- * GitHub Repo:    https://github.com/waimea-jmblack/level-3-programming-assesment
+ * GitHub Repo: https://github.com/waimea-jmblack/level-3-programming-assesment
  * ---------------------------------------------------------------------
  * Notes:
  * PROJECT NOTES HERE
@@ -24,7 +24,7 @@ import javax.swing.*
  */
 fun main() {
     FlatDarkLaf.setup()     // Flat, dark look-and-feel
-    val app = Room()         // Create the app model
+    val app = App()         // Create the app model
     val popUp = SubWindow(app)
     MainWindow(app, popUp)         // Create and show the UI, using the app model
 }
@@ -35,46 +35,41 @@ fun main() {
  * This is the place where any application data should be
  * stored, plus any application logic functions
  */
-class Room() {
-    // Constants defining any key values
-    val name:String
+
+/**
+ * Creating a class
+ */
+class Room(
+    val name:String,
     val description:String
-    val blockedExits:List<String>
-
-    ){
-        fun isExitBlocked(exit:String:Boolean{
-            return blockedExits.contains(exit)
-        }
-    }
-
+){
+    var north: Room? = null
+    var south: Room? = null
+    var east: Room? = null
+    var west: Room? = null
 }
 
 class App() {
-    // Data fields
-    var animal = mutableListOf("Hound", "Tiger", "Leopard",
-        "Eagle", "Lion", "Man", "Stag", "Shark", "Black Mumba", "Bull", "Bear")
 
-    var currentAnimal = 0  // Track the current animal index
+    val alienRoom = Room(
+        "Alien entry room",
+        "This room is the entry point for the Alien who broke through the hull of the ship",
+    )
 
-    // Application logic functions
-    fun nextAnimalCount() {
-        // Move to next animal in the list
-        currentAnimal = (currentAnimal + 1) % animal.size
-    }
+    val shipRoom = Room(
+        "Engineering Bay",
+        "Silence envelopes the once lively room of engineers",
+    )
 
-    fun prevAnimalCount() {
-        // Move to previous animal in the list
-        currentAnimal = (currentAnimal - 1 + animal.size) % animal.size
-    }
+
 }
-
 
 /**
  * Main UI window (view)
  * Defines the UI and responds to events
  * The app model should be passwd as an argument
  */
-class MainWindow(val app: Room, val popUp: SubWindow) : JFrame(), ActionListener {
+class MainWindow(val app: App, val popUp: SubWindow) : JFrame(), ActionListener {
 
     // Fields to hold the UI elements
     private lateinit var roomPannel: JLabel
@@ -144,14 +139,7 @@ class MainWindow(val app: Room, val popUp: SubWindow) : JFrame(), ActionListener
      * of the application model
      */
     fun updateView() {
-        if (app.clicks == app.MAX_CLICKS) {
-            clicksLabel.text = "Max clicks reached!"
-            clickButton.isEnabled = false
-        }
-        else {
-            clicksLabel.text = "You clicked ${app.clicks} times"
-            clickButton.isEnabled = true
-        }
+
     }
 
     /**
@@ -162,9 +150,6 @@ class MainWindow(val app: Room, val popUp: SubWindow) : JFrame(), ActionListener
     override fun actionPerformed(e: ActionEvent?) {
         when (e?.source) {
             clickButton -> {
-                app.updateClickCount()
-                updateView()
-
                 popUp.isVisible = true
             }
         }
@@ -173,7 +158,7 @@ class MainWindow(val app: Room, val popUp: SubWindow) : JFrame(), ActionListener
 }
 
 
-class SubWindow(val app: Room) : JFrame() {
+class SubWindow(val app: App) : JFrame() {
 
     // Fields to hold the UI elements
     private lateinit var clicksLabel: JLabel
