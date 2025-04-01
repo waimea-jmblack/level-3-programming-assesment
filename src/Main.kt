@@ -7,7 +7,16 @@
  * GitHub Repo: https://github.com/waimea-jmblack/level-3-programming-assesment
  * ---------------------------------------------------------------------
  * Notes:
- * PROJECT NOTES HERE
+ * This is a game is about escaping an alien who has boarded your ship, and has killed every last person who once
+ * called this ship home, so you have to escape before you lose all your air.
+ * I don't want to bore you with the details, to be honest I don't even want to be here, all I want to do is make enough money
+ * so that my present and future family live the greatest lifestyle. Then I can go in peace. Because no one on this earth wants a
+ * guy like me, the only people that would hopefully love me are in another life.
+ * But before that, I have to escape these shit-holes we call a 9 to 5 and school, and to
+ * do that I must become the best version of myself. Coding will not accomplish this goal. And besides what's the fucking
+ * point if I could just use AI to make this 10 times better. What a fucking joke. I earn more money trading and affiliate
+ * marketing then the fucking teacher or whoever is marking this paper.
+ * Why do I even try. Besides I fucking suck at coding haha, fuck my life.
  * =====================================================================
  */
 
@@ -22,8 +31,8 @@ import javax.swing.*
 fun main() {
     FlatDarkLaf.setup()     // Flat, dark look-and-feel
     val app = App()         // Create the app/game model
-    val mapWindow = SubWindow(app)
-    val mainWindow = MainWindow(app, mapWindow)         // Create and show the UI, using the app model
+    val mainWindow = MainWindow(app)         // Create and show the UI, using the app model
+    val mapWindow = SubWindow()
 }
 
 /**
@@ -38,7 +47,6 @@ fun main() {
 class Room(
     val name: String,
     val description: String,
-    var hasOxygen: Boolean = true  // Some rooms might have low oxygen
 ) {
     // Connections to other rooms
     var north: Room? = null
@@ -194,7 +202,7 @@ class App {
  * Defines the UI and responds to events
  * The app model should be passed as an argument
  */
-class MainWindow(val app: App, val popUp: SubWindow) : JFrame(), ActionListener {
+class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var roomLabel: JLabel
     private lateinit var descriptionLabel: JLabel
     private lateinit var mapButton: JButton
@@ -202,6 +210,7 @@ class MainWindow(val app: App, val popUp: SubWindow) : JFrame(), ActionListener 
     private lateinit var eastButton: JButton
     private lateinit var southButton: JButton
     private lateinit var westButton: JButton
+    private lateinit var map: SubWindow
 
     /**
      * Configure the UI and display it
@@ -233,56 +242,64 @@ class MainWindow(val app: App, val popUp: SubWindow) : JFrame(), ActionListener 
         val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 16)
         val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 20)
 
-        // Name of the room the character is in.
-        roomLabel = JLabel().apply {
-            bounds = Rectangle(30, 30, 540, 30)
-            font = bigFont
-            add(this)
-        }
+        map = SubWindow()
+
+        roomLabel = JLabel("Why")
+        roomLabel.horizontalAlignment = SwingConstants.LEFT
+        roomLabel.bounds = Rectangle(25, 100, 325, 50)
+        roomLabel.font = baseFont
+        add(roomLabel)
 
         // Description of the rooms
         descriptionLabel = JLabel().apply {
             bounds = Rectangle(30, 70, 540, 100)
             font = baseFont
-            add(this)
+
         }
+        add(descriptionLabel)
 
         mapButton = JButton("Map").apply {
             bounds = Rectangle(410, 260, 150, 60)
             font = baseFont
-            addActionListener(this@MainWindow)
-            add(this)
         }
+        add(mapButton)
+        mapButton.addActionListener(this)
 
         //=Navigation buttons======================================================//
 
         // North Button
-        northButton = JButton("North").apply {
-            bounds = Rectangle(250, 190, 100, 30)
-            addActionListener(this@MainWindow)
-            add(this)
-        }
+        northButton = JButton("North")
+        northButton.bounds = Rectangle(250, 190, 100, 30)
+        northButton.font = baseFont
+        northButton.addActionListener(this)     // Handle any clicks
+        northButton.isFocusable = false            // Prevent from capturing key events
+        add(northButton)
 
         // South Button
-        southButton = JButton("South").apply {
-            bounds = Rectangle(250, 250, 100, 30)
-            addActionListener(this@MainWindow)
-            add(this)
-        }
+        southButton = JButton("South")
+        southButton.bounds = Rectangle(250, 250, 100, 30)
+        southButton.font = baseFont
+        southButton.addActionListener(this)     // Handle any clicks
+        southButton.isFocusable = false            // Prevent from capturing key events
+        add(southButton)
 
         // East Button
-        eastButton = JButton("East").apply {
-            bounds = Rectangle(360, 220, 100, 30)
-            addActionListener(this@MainWindow)
-            add(this)
-        }
+        eastButton = JButton("East")
+        eastButton.bounds = Rectangle(360, 220, 100, 30)
+        eastButton.font = baseFont
+        eastButton.addActionListener(this)     // Handle any clicks
+        eastButton.isFocusable = false            // Prevent from capturing key events
+        add(eastButton)
+
 
         // West Button
-        westButton = JButton("West").apply {
-            bounds = Rectangle(140, 220, 100, 30)
-            addActionListener(this@MainWindow)
-            add(this)
-        }
+        westButton = JButton("Down")
+        westButton.bounds = Rectangle(140, 220, 100, 30)
+        westButton.font = baseFont
+        westButton.addActionListener(this)     // Handle any clicks
+        westButton.isFocusable = false            // Prevent from capturing key events
+        add(westButton)
+
     }
 
     /**
@@ -307,7 +324,7 @@ class MainWindow(val app: App, val popUp: SubWindow) : JFrame(), ActionListener 
      */
     override fun actionPerformed(e: ActionEvent?) {
         when (e?.source) {
-            mapButton -> popUp.isVisible = true
+            mapButton -> map.isVisible = true
             northButton -> {
                 app.move("north")
                 updateView()
@@ -328,7 +345,7 @@ class MainWindow(val app: App, val popUp: SubWindow) : JFrame(), ActionListener 
     }
 }
 
-class SubWindow(val app: App) : JFrame() {
+class SubWindow() : JFrame() {
     // Fields to hold the UI elements
     private lateinit var startMap: JLabel
     private lateinit var securityMap: JLabel
