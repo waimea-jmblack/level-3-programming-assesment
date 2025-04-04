@@ -79,83 +79,159 @@ class App {
         // Initialize/ making the rooms
         val securityRoom = Room(
             "Security",
-            "Blood spills from the body's of fallen comrades, this apex predator lives for the hunt",
+            "The security team's last stand is painted across the walls in broad strokes of crimson. Smashed rifles " +
+                    "and dented armor tell the story—they fought hard. They lost harder. The predator didn't just kill them; " +
+                    "it arranged the corpses, like some grotesque trophy display. The emergency lockdown button lies just out of " +
+                    "reach... beneath a slowly spreading pool of blood",
         )
 
         val startRoom = Room(
             "The beginning...",
-            "You wake up in the bridge shrouded in darkness, you know your not alone.",
+            "Your head throbs as you stir in the pitch-black command center. Emergency lights flicker, revealing " +
+                    "splattered control panels and toppled chairs. The acrid scent of burnt wiring mixes with something... " +
+                    "organic. A distant, wet shuffling echoes from the corridor outside. You're not supposed to be alive. " +
+                    "And you're definitely not alone.",
         )
 
         val weaponsRoom = Room(
             "Weapons Room",
-            "Horror fills you head as you come to the realisation theres no weapons."
+            "Cold dread seeps in as you stare at the empty racks—not just cleared, but peeled open with terrifying precision. " +
+                    "The reinforced steel is curled back like flower petals, the few remaining sidearms crushed into useless scrap. A single " +
+                    "survival knife juts from the wall, embedded to the hilt in a dark, coagulated stain. Whatever did this knew exactly how to disarm you."
         )
 
         val labRoom = Room(
             "Lab Room",
-            "Glass and dangerous chemical cover the now battered floor, creating a foul odor."
+            "The containment pods lie shattered—not from the inside, but from something breaking in. Thick, " +
+                    "viscous fluid drips from empty embryo tanks, their stolen contents evident by the drag marks leading " +
+                    "toward the vents. A fractured security feed shows a single frame: curled, leathery husks being hauled " +
+                    "away into darkness."
         )
 
         //=====================================================================================================//
 
         val comsRoom = Room(
             "Communications",
-            "You hope fades as you enter this room. " +
-                    "The alien made sure to destroy any hope of communicating with any other survivors."
+            "Your hope fades as you enter. The alien clawed through every console, wires ripped out like tendons. " +
+                    "Shattered screens dangle by their cables, swinging gently—as if something just left. The emergency " +
+                    "beacon lies in pieces, its transmitter crushed underfoot. No signals are getting out."
         )
 
         val trashRoom = Room(
             "Trash Room",
-            "The stench of blood and trash floats through the air, you " +
-                    "do not dare to explore for anything of use."
+            "The stench of blood and rotting waste hits you like a wall. Something big died here—recently. " +
+                    "The compactor’s teeth gleam with gristle, jammed mid-cycle. You step back as a crushed ration tin " +
+                    "clinks underfoot. No. Nothing here is worth touching."
         )
 
         val oRoom = Room(
             "Oxygen Room",
-            "Thankfully the backup generators and the oxygen are still operational otherwise i'd be out of air. "
+            "Thankfully the backup O2 generators are still running—weak, sputtering, but alive. The main systems" +
+                    " are fried, vents clogged with something dark and fibrous. A flickering screen reports steady depletion: " +
+                    "23% and falling. Every breath feels like my last.  "
         )
 
         val gardenRoom = Room(
             "Gardens",
-            "All our food has been torn up and revenged by the lifeform after it finished its hunt"
+            "The ship’s garden is a ravaged wasteland—smashed grow-pods, half-eaten plants, and gnawed ration packs litter " +
+                    "the floor. Claw marks tear through the soil where the alien dug up every edible root and berry. A crewmate’s " +
+                    "boot lies in the corner, filled with squirming tendrils. It didn’t just kill here… it feasted."
         )
 
         //=====================================================================================================//
 
+        val alienRoom = Room(
+            "Alien Entry Point",
+            "The ship’s hull is split like a wound stitched shut—jagged metal fused in unnatural patterns, Nearby, a maintenance drone " +
+                    "lies crushed against the wall. soldiers body's lay motionless, a futile human attempt to patch what the alien had already closed behind it. " +
+                    "Not to keep the void out… but to keep you in.",
+        )
+
+        val cargoRoom = Room(
+            "Cargo Bay",
+            "Crates lie broken open, their contents spilled across the floor. Some were torn apart with brute " +
+                    "force, others with terrifying precision. Something was searching for supplies… or hiding among them."
+        )
         val engineRoom = Room(
             "Engineering Bay",
-            "Silence and the cover of darkness envelopes the once lively room of engineers",
+            "The deafening hum of the reactors has been replaced by an eerie silence, broken only by the occasional " +
+                    "drip of leaking coolant. The engineers' tools lie scattered in the dark, some still clutched in skeletal hands. " +
+                    "The emergency lights cast long shadows from the mangled machinery—something didn’t just disable " +
+                    "the engines… it savaged them.",
         )
 
-        val alienRoom = Room(
-            "Alien entry room",
-            "This is the darkest room of them all. Blood and destruction are the only things filling this room.",
+        val cafeRoom = Room(
+            "Cafeteria",
+            "The stench of rotting food and copper hangs thick. A chair lies toppled, tray upended—someone " +
+                    "abandoned their last meal in terror. Behind the kitchen’s broken door, something shifts in the darkness. " +
+                    "Metal creaks. A wet, rhythmic sound follows. Whatever’s in there… it’s feeding."
         )
+
+        //=====================================================================================================//
+
+        val airLockRoom = Room(
+            "Air Lock",
+            "The reinforced door is grotesquely warped—massive, clawed dents punched inward as if something colossal " +
+                    "tried to brute-force its way inside. Frost still clings to the edges where the alien’s patience ran out. " +
+                    "A trail of frozen, tar-like droplets leads away… toward a different entry point. It’s already in."
+        )
+
+
+        val medBayRoom = Room(
+            "Med Bay",
+            "The smell hits first—antiseptic and bile undercut by something sweetly rotten. The emergency lights " +
+                    "bathe the room in a sickly glow, illuminating the dark arcs of blood sprayed across surgical trays. A " +
+                    "medical drone still whirs on the floor, its robotic arm repeatedly stitching—and restitching—a gaping " +
+                    "wound in empty air. The last patient’s vitals flash CRITICAL on the screen... but the bed holds only a " +
+                    "curled-up, hollowed-out biosuit."
+        )
+
+
+
+        val crewQuarterRoom = Room(
+            "Crew Quarter",
+            "The room is a graveyard of interrupted lives—family photos trampled underfoot, a child’s holotoy " +
+                    "still chirping a distorted lullaby. The bunks are shredded, mattresses gutted with surgical precision. " +
+                    "Something wasn’t just hunting here… it was studying. The sobbing from Locker C hitches—a wet, gurgling sound. " +
+                    "That’s not a human voice anymore"
+        )
+
 
         // Connect rooms
+        comsRoom.connectSouth(trashRoom)
+        comsRoom.connectEast(alienRoom)
+
+        trashRoom.connectEast(cargoRoom)
+
         securityRoom.connectEast(comsRoom)
         securityRoom.connectSouth(startRoom)
 
         startRoom.connectNorth(securityRoom)
-        startRoom.connectSouth(weaponsRoom)
         startRoom.connectEast(trashRoom)
+        startRoom.connectSouth(weaponsRoom)
 
         weaponsRoom.connectNorth(startRoom)
+        weaponsRoom.connectEast(oRoom)
         weaponsRoom.connectSouth(labRoom)
 
-        labRoom.connectNorth(weaponsRoom)
         labRoom.connectEast(gardenRoom)
-        //==================================//
-        comsRoom.connectNorth(securityRoom)
 
-        trashRoom.connectWest(startRoom)
-        trashRoom.connectEast(engineRoom)
-        trashRoom.connectSouth(oRoom)
+        gardenRoom.connectNorth(oRoom)
+        gardenRoom.connectEast(cafeRoom)
 
-        oRoom.connectNorth(trashRoom)
+        oRoom.connectEast(engineRoom)
 
-        oRoom.connectSouth(gardenRoom)
+        cargoRoom.connectSouth(engineRoom)
+
+        alienRoom.connectEast(airLockRoom)
+        alienRoom.connectSouth(cargoRoom)
+
+        medBayRoom.connectNorth(airLockRoom)
+        medBayRoom.connectSouth(crewQuarterRoom)
+        
+
+
+
 
 
         // Add to rooms list
@@ -222,8 +298,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     }
 
     private fun addControls() {
-        val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 16)
-        val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 20)
+        val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 12)
+        val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 16)
 
         // Room Label
         roomLabel = JLabel("Room Name")
@@ -233,7 +309,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
 
         // Description Label (fixed position)
         descriptionLabel = JLabel("Description")
-        descriptionLabel.bounds = Rectangle(25, 60, 550, 80)
+        descriptionLabel.bounds = Rectangle(25, 60, 550, 100)
         descriptionLabel.font = baseFont
         add(descriptionLabel)
 
