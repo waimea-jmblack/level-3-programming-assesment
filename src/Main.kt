@@ -9,14 +9,6 @@
  * Notes:
  * This is a game is about escaping an alien who has boarded your ship, and has killed every last person who once
  * called this ship home, so you have to escape before you lose all your air.
- * I don't want to bore you with the details, to be honest I don't even want to be here, all I want to do is make enough money
- * so that my present and future family live the greatest lifestyle. Then I can go in peace. Because no one on this earth wants a
- * guy like me, the only people that would hopefully love me are in another life.
- * But before that, I have to escape these shit-holes we call a 9 to 5 and school, and to
- * do that I must become the best version of myself. Coding will not accomplish this goal. And besides what's the fucking
- * point if I could just use AI to make this 10 times better. What a fucking joke. I earn more money trading and affiliate
- * marketing then the fucking teacher or whoever is marking this paper.
- * Why do I even try. Besides I fucking suck at coding haha, fuck my life.
  * =====================================================================
  */
 
@@ -31,8 +23,8 @@ import javax.swing.*
 fun main() {
     FlatDarkLaf.setup()     // Flat, dark look-and-feel
     val app = App()         // Create the app/game model
-    val mainWindow = MainWindow(app)         // Create and show the UI, using the app model
-    val mapWindow = SubWindow()
+    MainWindow(app)         // Create and show the UI, using the app model
+    SubWindow()
 }
 
 /**
@@ -210,22 +202,16 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var eastButton: JButton
     private lateinit var southButton: JButton
     private lateinit var westButton: JButton
-    private lateinit var map: SubWindow
+    private val map = SubWindow()
 
-    /**
-     * Configure the UI and display it
-     */
     init {
-        configureWindow()               // Configure the window
-        addControls()                   // Build the UI
-        setLocationRelativeTo(null)     // Centre the window
+        configureWindow()
+        addControls()
+        setLocationRelativeTo(null)
         updateView()
         isVisible = true
     }
 
-    /**
-     * Configure the main window
-     */
     private fun configureWindow() {
         title = "Last Breath"
         contentPane.preferredSize = Dimension(600, 350)
@@ -235,95 +221,67 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         pack()
     }
 
-    /**
-     * Populate the UI with UI controls
-     */
     private fun addControls() {
         val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 16)
         val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 20)
 
-        map = SubWindow()
-
-        roomLabel = JLabel("Why")
-        roomLabel.horizontalAlignment = SwingConstants.LEFT
-        roomLabel.bounds = Rectangle(25, 100, 325, 50)
-        roomLabel.font = baseFont
+        // Room Label
+        roomLabel = JLabel("Room Name")
+        roomLabel.bounds = Rectangle(25, 20, 550, 30)
+        roomLabel.font = bigFont
         add(roomLabel)
 
-        // Description of the rooms
-        descriptionLabel = JLabel().apply {
-            bounds = Rectangle(30, 70, 540, 100)
-            font = baseFont
-
-        }
+        // Description Label (fixed position)
+        descriptionLabel = JLabel("Description")
+        descriptionLabel.bounds = Rectangle(25, 60, 550, 80)
+        descriptionLabel.font = baseFont
         add(descriptionLabel)
 
-        mapButton = JButton("Map").apply {
-            bounds = Rectangle(410, 260, 150, 60)
-            font = baseFont
-        }
-        add(mapButton)
-        mapButton.addActionListener(this)
-
-        //=Navigation buttons======================================================//
-
-        // North Button
+        // Navigation Buttons
         northButton = JButton("North")
-        northButton.bounds = Rectangle(250, 190, 100, 30)
+        northButton.bounds = Rectangle(250, 180, 100, 30)
         northButton.font = baseFont
-        northButton.addActionListener(this)     // Handle any clicks
-        northButton.isFocusable = false            // Prevent from capturing key events
+        northButton.addActionListener(this)
         add(northButton)
 
-        // South Button
         southButton = JButton("South")
-        southButton.bounds = Rectangle(250, 250, 100, 30)
+        southButton.bounds = Rectangle(250, 220, 100, 30)
         southButton.font = baseFont
-        southButton.addActionListener(this)     // Handle any clicks
-        southButton.isFocusable = false            // Prevent from capturing key events
+        southButton.addActionListener(this)
         add(southButton)
 
-        // East Button
         eastButton = JButton("East")
-        eastButton.bounds = Rectangle(360, 220, 100, 30)
+        eastButton.bounds = Rectangle(360, 200, 100, 30)
         eastButton.font = baseFont
-        eastButton.addActionListener(this)     // Handle any clicks
-        eastButton.isFocusable = false            // Prevent from capturing key events
+        eastButton.addActionListener(this)
         add(eastButton)
 
-
-        // West Button
-        westButton = JButton("Down")
-        westButton.bounds = Rectangle(140, 220, 100, 30)
+        westButton = JButton("West")  // Fixed from "Down" to "West"
+        westButton.bounds = Rectangle(140, 200, 100, 30)
         westButton.font = baseFont
-        westButton.addActionListener(this)     // Handle any clicks
-        westButton.isFocusable = false            // Prevent from capturing key events
+        westButton.addActionListener(this)
         add(westButton)
 
+        // Map Button
+        mapButton = JButton("Map")
+        mapButton.bounds = Rectangle(410, 260, 150, 60)
+        mapButton.font = bigFont
+        mapButton.addActionListener(this)
+        add(mapButton)
     }
 
-    /**
-     * Update the UI controls based on the current state
-     * of the application model
-     */
     fun updateView() {
         roomLabel.text = app.currentRoom.name
-        descriptionLabel.text = "<html>${app.currentRoom.description}</html>"  // HTML allows text wrapping
+        descriptionLabel.text = "<html>${app.currentRoom.description}</html>"
 
-        // Enable/disable buttons based on available exits
         northButton.isEnabled = app.currentRoom.north != null
         southButton.isEnabled = app.currentRoom.south != null
         eastButton.isEnabled = app.currentRoom.east != null
         westButton.isEnabled = app.currentRoom.west != null
     }
 
-    /**
-     * Handle any UI events (e.g. button clicks)
-     * Usually this involves updating the application model
-     * then refreshing the UI view
-     */
-    override fun actionPerformed(e: ActionEvent?) {
-        when (e?.source) {
+    override fun actionPerformed(e: ActionEvent) {
+        when (e.source) {
             mapButton -> map.isVisible = true
             northButton -> {
                 app.move("north")
@@ -344,42 +302,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         }
     }
 }
-
-class SubWindow() : JFrame() {
-    // Fields to hold the UI elements
-    private lateinit var startMap: JLabel
-    private lateinit var securityMap: JLabel
-    private lateinit var weaponsMap: JLabel
-    private lateinit var labMap: JLabel
-    //========================================//
-    private lateinit var comsMap: JLabel
-    private lateinit var trashMap: JLabel
-    private lateinit var oxygenMap: JLabel
-    private lateinit var gardenMap: JLabel
-    //========================================//
-    private lateinit var hangerMap: JLabel
-    private lateinit var engineMap: JLabel
-    private lateinit var storeroomMap: JLabel
-    private lateinit var cafeMap: JLabel
-    //========================================//
-    private lateinit var airlockMap: JLabel
-    private lateinit var crewMap: JLabel
-    private lateinit var medBayMap: JLabel
-    private lateinit var observeMap: JLabel
-
-    /**
-     * Configure the UI and display it
-     */
+class SubWindow : JFrame() {
     init {
-        configureWindow()               // Configure the window
-        addControls()                   // Build the UI
-        setLocationRelativeTo(null)     // Centre the window
-        isVisible = false              // Make it invisible initially
+        configureWindow()
+        addControls()
+        setLocationRelativeTo(null)
+        isVisible = false
     }
 
-    /**
-     * Configure the MAP window
-     */
     private fun configureWindow() {
         title = "Map Of Ship"
         contentPane.preferredSize = Dimension(750, 450)
@@ -388,145 +318,50 @@ class SubWindow() : JFrame() {
         pack()
     }
 
-    /**
-     * Populate the UI with UI controls
-     */
     private fun addControls() {
-        val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 10)
+        val securityMap = JLabel("Security")
+        securityMap.bounds = Rectangle(35, 50, 100, 50)
+        securityMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(securityMap)
 
-        securityMap = JLabel("Security").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(35, 50, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        val startMap = JLabel("Start")
+        startMap.bounds = Rectangle(35, 150, 100, 50)
+        startMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(startMap)
 
-        startMap = JLabel("Start").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(35, 150, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        val weaponsMap = JLabel("Weapons")
+        weaponsMap.bounds = Rectangle(35, 250, 100, 50)
+        weaponsMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(weaponsMap)
 
-        weaponsMap = JLabel("Weapons").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(35, 250, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        val labMap = JLabel("Lab")
+        labMap.bounds = Rectangle(35, 350, 100, 50)
+        labMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(labMap)
 
-        labMap = JLabel("Lab").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(35, 350, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        //=======================================================================================//
 
-        //=====================================================================//
+        val comsMap = JLabel("Communications")
+        comsMap.bounds = Rectangle(170, 50, 100, 50)
+        comsMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(comsMap)
 
-        comsMap = JLabel("Communications").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(170, 50, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        val trashMap = JLabel("Trash Unit")
+        trashMap.bounds = Rectangle(170, 150, 100, 50)
+        trashMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(trashMap)
 
-        trashMap = JLabel("Trash Unit").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(170, 150, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        val oxygenMap = JLabel("Oxygen")
+        oxygenMap.bounds = Rectangle(170, 250, 100, 50)
+        oxygenMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(oxygenMap)
 
-        oxygenMap = JLabel("Oxygen").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(170, 250, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        val gardenMap = JLabel("Gardens")
+        gardenMap.bounds = Rectangle(170, 350, 100, 50)
+        gardenMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(gardenMap)
 
-        gardenMap = JLabel("Gardens").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(170, 350, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
+        //=======================================================================================//
 
-        //=====================================================================//
-
-        hangerMap = JLabel("Hanger").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(305, 50, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
-
-        engineMap = JLabel("Engine").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(305, 150, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
-
-        storeroomMap = JLabel("Storage").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(305, 250, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
-
-        cafeMap = JLabel("Cafe").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(305, 350, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
-
-        //=====================================================================//
-
-        airlockMap = JLabel("Airlock").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(440, 50, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
-
-        crewMap = JLabel("Crew Quarters").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(440, 150, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
-
-        medBayMap = JLabel("Med Bay").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(440, 250, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
-
-        observeMap = JLabel("Observatories").apply {
-            horizontalAlignment = SwingConstants.CENTER
-            bounds = Rectangle(440, 350, 100, 50)
-            border = BorderFactory.createLineBorder(Color.GRAY, 3)
-            font = baseFont
-            add(this)
-        }
     }
 }
-
