@@ -196,6 +196,51 @@ class App {
                     "That’s not a human voice anymore"
         )
 
+        val cryogenicRoom = Room(
+            "Cryogenic Room",
+            "The reinforced pods are scarred with claw marks—not random, but methodical, like a predator testing each cell for " +
+                    "worthy prey. Most remain sealed, their occupants deemed unworthy. Pod-12’s shattered exterior tells a different story: " +
+                    "frost-coated bones and mangled combat armor spill from the rupture. The terminal’s last log glitches on repeat: ‘COMBAT " +
+                    "SPECIMEN REJECTED. FAILURE: ████ MINUTES.’ The alien didn’t just hunt here… it held auditions."
+        )
+
+        //=====================================================================================================//
+
+        val maintenceRoom = Room(
+            "Maintence",
+            "The drones never stood a chance. Their shattered chassis litter the floor—some torn in half, others crushed into the " +
+                    "grating with terrifying force. A few still twitch, their broken servos whining as they pointlessly drag themselves in circles. " +
+                    "The emergency repair terminal flickers with a single, repeating alert: 'CRITICAL DAMAGE DETECTED " +
+                    "IN SECTOR—' before cutting to static."
+        )
+
+        val powerDistributionRoom = Room(
+            "Power Distribution",
+            "The breaker panels are split open like gutted animals, copper wiring coiled in blood-soaked tangles. the metallic " +
+                    "stink of scorched circuits mixes with rotting meat—some poor bastard got fused to the main conduit. their blackened " +
+                    "fingers still clutch a fried voltage meter. sparks spit from the corpse whenever the backup generators stutter to life."
+        )
+
+        val reactorRoom = Room(
+            "Reactor Chamber",
+            "The core hums at 12% capacity—just enough to keep the lights dying slowly. something clawed through three-foot-thick " +
+                    "shielding like it was wet paper. the walls are streaked with radioactive coolant and... thicker fluids, all leading to a " +
+                    "service pit where the maintenance team vanished. the radiation alarm chirps calmly, like it's given up."
+        )
+
+        val hangerRoom = Room(
+            "Hanger Room",
+            "The lockdown protocols were meant to seal out intruders—now they've caged you both inside. The blast doors stand unyielding, " +
+                    "their reinforced frames dented from the inside by desperate, panicked blows. The override panel isn't just broken—it's been " +
+                    "systematically destroyed, each component clawed apart with terrifying precision. Escape pods sit half-crushed under collapsed scaffolding. " +
+                    "The air smells of ionized metal and stale fear. The remaining escape pods are so close—just past the reactor chamber, through " +
+                    " the power distribution room. Screams of the Alien eco, a cruel reminder of how little stands between you and survival."
+
+        )
+
+
+
+
 
         // Connect rooms
         comsRoom.connectSouth(trashRoom)
@@ -227,9 +272,23 @@ class App {
         alienRoom.connectSouth(cargoRoom)
 
         medBayRoom.connectNorth(airLockRoom)
+        medBayRoom.connectEast(reactorRoom)
         medBayRoom.connectSouth(crewQuarterRoom)
-        
 
+        engineRoom.connectEast(crewQuarterRoom)
+
+        crewQuarterRoom.connectSouth(cryogenicRoom)
+
+        cafeRoom.connectEast(cryogenicRoom)
+
+        cryogenicRoom.connectEast(maintenceRoom)
+        
+        powerDistributionRoom.connectNorth(reactorRoom)
+        powerDistributionRoom.connectSouth(maintenceRoom)
+
+        airLockRoom.connectEast(hangerRoom)
+
+        hangerRoom.connectSouth(reactorRoom)
 
 
 
