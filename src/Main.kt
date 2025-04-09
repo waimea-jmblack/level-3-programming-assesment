@@ -85,6 +85,15 @@ class App {
                     "reach... beneath a slowly spreading pool of blood",
         )
 
+        val ammunitionDepotRoom = Room(
+            "Ammunition Depot",
+            "The armory is a tomb of wasted firepower—shattered racks of rifles line the walls, their barrels bent into " +
+                    "unnatural shapes. Crates of grenades sit unopened, their seals intact... and covered in a web of sticky, translucent " +
+                    "fibers. The scent of gunpowder mixes with something muskier, something alive. A single undamaged shotgun rests on " +
+                    "the counter—its ejection port clogged with a throbbing, vein-like growth. The alien didn’t just raid this place. " +
+                    "It claimed it"
+        )
+
         val startRoom = Room(
             "The beginning...",
             "Your head throbs as you stir in the pitch-black command center. Emergency lights flicker, revealing " +
@@ -117,6 +126,13 @@ class App {
                     "beacon lies in pieces, its transmitter crushed underfoot. No signals are getting out."
         )
 
+        val gymRoom = Room(
+            "Gym Room",
+            "The gym’s lights flicker to life as you enter, revealing a space frozen mid-workout. Treadmills still " +
+                    "run at full speed, their belts stained with dark fluids. A workout playlist crackles through broken speakers—just " +
+                    "upbeat enough to make the claw marks on the lockers feel surreal. The only thing out of place? Every single mirror " +
+                    "is angled just wrong. You never get a full reflection. Just glimpses of something moving when you turn your head."
+        )
         val trashRoom = Room(
             "Trash Room",
             "The stench of blood and rotting waste hits you like a wall. Something big died here—recently. " +
@@ -124,11 +140,10 @@ class App {
                     "clinks underfoot. No. Nothing here is worth touching."
         )
 
-        val oRoom = Room(
-            "Oxygen Room",
-            "Thankfully the backup O2 generators are still running—weak, sputtering, but alive. The main systems" +
-                    " are fried, vents clogged with something dark and fibrous. A flickering screen reports steady depletion: " +
-                    "23% and falling. Every breath feels like my last.  "
+        val cargoRoom = Room(
+            "Cargo Bay",
+            "Crates lie broken open, their contents spilled across the floor. Some were torn apart with brute " +
+                    "force, others with terrifying precision. Something was searching for supplies… or hiding among them."
         )
 
         val gardenRoom = Room(
@@ -147,11 +162,20 @@ class App {
                     "Not to keep the void out… but to keep you in.",
         )
 
-        val cargoRoom = Room(
-            "Cargo Bay",
-            "Crates lie broken open, their contents spilled across the floor. Some were torn apart with brute " +
-                    "force, others with terrifying precision. Something was searching for supplies… or hiding among them."
+        val meetingRoom = Room(
+            "Meeting Room",
+            "The holographic projector still hums, casting a ghostly agenda list onto the smoke-stained table. 'Emergency Protocols' sits unchecked at the bottom. " +
+                    "Chairs are overturned—not in panic, but in some unnatural pattern, like a grotesque mockery of a discussion circle. At the head of the table, a coffee cup " +
+                    "sits untouched, its surface rippling faintly. Not from steam. From the thing that's breathing into it."
         )
+
+        val oRoom = Room(
+            "Oxygen Room",
+            "Thankfully the backup O2 generators are still running—weak, sputtering, but alive. The main systems" +
+                    " are fried, vents clogged with something dark and fibrous. A flickering screen reports steady depletion: " +
+                    "23% and falling. Every breath feels like my last.  "
+        )
+
         val engineRoom = Room(
             "Engineering Bay",
             "The deafening hum of the reactors has been replaced by an eerie silence, broken only by the occasional " +
@@ -176,6 +200,13 @@ class App {
                     "A trail of frozen, tar-like droplets leads away… toward a different entry point. It’s already in."
         )
 
+        val spaceStorageRoom = Room(
+            "Space Storage Room",
+            "The emergency suits hang in tatters—not torn off, but peeled from the inside out, their visors cracked " +
+                    "like eggshells. Tools and oxygen tanks lie scattered in congealing pools of something too dark to be just " +
+                    "hydraulic fluid. The flickering worklight catches movement in a half-open storage locker—just a loose glove swaying. " +
+                    "Probably. The air reeks of copper and that sour, greasy stench the vents keep pumping through the ship."
+        )
 
         val medBayRoom = Room(
             "Med Bay",
@@ -214,12 +245,14 @@ class App {
                     "IN SECTOR—' before cutting to static."
         )
 
-        val powerDistributionRoom = Room(
-            "Power Distribution",
-            "The breaker panels are split open like gutted animals, copper wiring coiled in blood-soaked tangles. the metallic " +
-                    "stink of scorched circuits mixes with rotting meat—some poor bastard got fused to the main conduit. their blackened " +
-                    "fingers still clutch a fried voltage meter. sparks spit from the corpse whenever the backup generators stutter to life."
+        val auxilaryRoom = Room(
+            "Auxilary Engineering",
+            "The backup systems hum—wrong. Too smooth. Too quiet. The panels are flawless. No damage. No blood. Just... rewired. " +
+                    "Your name blinks on the maintenance logs for work you never did. The temperature drops exactly when you notice the new " +
+                    "piping—shaped like veins. The ship’s AI whispers: 'All systems nominal.' The lie echoes in the dark. You don’t remember " +
+                    "this place. But it remembers you."
         )
+
 
         val reactorRoom = Room(
             "Reactor Chamber",
@@ -227,6 +260,14 @@ class App {
                     "shielding like it was wet paper. the walls are streaked with radioactive coolant and... thicker fluids, all leading to a " +
                     "service pit where the maintenance team vanished. the radiation alarm chirps calmly, like it's given up."
         )
+
+        val powerDistributionRoom = Room(
+            "Power Distribution",
+            "The breaker panels are split open like gutted animals, copper wiring coiled in blood-soaked tangles. the metallic " +
+                    "stink of scorched circuits mixes with rotting meat—some poor bastard got fused to the main conduit. their blackened " +
+                    "fingers still clutch a fried voltage meter. sparks spit from the corpse whenever the backup generators stutter to life."
+        )
+
 
         val hangerRoom = Room(
             "Hanger Room",
@@ -238,64 +279,87 @@ class App {
 
         )
 
+        //=====================================================================================================//
 
+        val podsRoom = Room(
+            "Escape Pods",
+            "The pod’s hatch glows just ahead—safety. But the thunder of claws on metal shakes the walls. Closer. " +
+                    "Louder. You slam the release button. The door hisses shut. A shadow fills the viewport. Not a monster. " +
+                    "Something worse. Something knowing. Its eyes lock onto yours as the pod detaches. The last thing you see isn’t " +
+                    "teeth or claws—it’s the thing smiling as you escape. Like this was always the plan."
+        )
 
 
 
         // Connect rooms
-        comsRoom.connectSouth(trashRoom)
-        comsRoom.connectEast(alienRoom)
-
-        trashRoom.connectEast(cargoRoom)
 
         securityRoom.connectEast(comsRoom)
-        securityRoom.connectSouth(startRoom)
+        securityRoom.connectSouth(ammunitionDepotRoom)
 
-        startRoom.connectNorth(securityRoom)
+        startRoom.connectNorth(ammunitionDepotRoom)
         startRoom.connectEast(trashRoom)
         startRoom.connectSouth(weaponsRoom)
 
-        weaponsRoom.connectNorth(startRoom)
-        weaponsRoom.connectEast(oRoom)
-        weaponsRoom.connectSouth(labRoom)
-
+        labRoom.connectNorth(weaponsRoom)
         labRoom.connectEast(gardenRoom)
 
-        gardenRoom.connectNorth(oRoom)
-        gardenRoom.connectEast(cafeRoom)
+        //================================================//
 
-        oRoom.connectEast(engineRoom)
+        comsRoom.connectEast(alienRoom)
+        comsRoom.connectSouth(gymRoom)
 
-        cargoRoom.connectSouth(engineRoom)
+        trashRoom.connectNorth(gymRoom)
+        trashRoom.connectEast(oRoom)
+
+        cargoRoom.connectEast(engineRoom)
+        cargoRoom.connectSouth(gardenRoom)
+        cargoRoom.connectWest(weaponsRoom)
+
+        //================================================//
 
         alienRoom.connectEast(airLockRoom)
-        alienRoom.connectSouth(cargoRoom)
 
-        medBayRoom.connectNorth(airLockRoom)
-        medBayRoom.connectEast(reactorRoom)
-        medBayRoom.connectSouth(crewQuarterRoom)
+        meetingRoom.connectEast(spaceStorageRoom)
+        meetingRoom.connectSouth(oRoom)
+        meetingRoom.connectWest(gymRoom)
 
-        engineRoom.connectEast(crewQuarterRoom)
-
-        crewQuarterRoom.connectSouth(cryogenicRoom)
+        engineRoom.connectNorth(oRoom)
+        engineRoom.connectSouth(cafeRoom)
 
         cafeRoom.connectEast(cryogenicRoom)
+        cafeRoom.connectWest(gardenRoom)
 
-        cryogenicRoom.connectEast(maintenceRoom)
-        
-        powerDistributionRoom.connectNorth(reactorRoom)
-        powerDistributionRoom.connectSouth(maintenceRoom)
+        //note gardens north go to cafe MUST FIX
+
+        //================================================//
 
         airLockRoom.connectEast(hangerRoom)
+        airLockRoom.connectSouth(spaceStorageRoom)
 
-        hangerRoom.connectSouth(reactorRoom)
+        spaceStorageRoom.connectEast(auxilaryRoom)
+        spaceStorageRoom.connectSouth(medBayRoom)
 
+        crewQuarterRoom.connectNorth(medBayRoom)
+        crewQuarterRoom.connectEast(powerDistributionRoom)
+        crewQuarterRoom.connectSouth(cryogenicRoom)
+
+        //================================================//
+
+        auxilaryRoom.connectNorth(hangerRoom)
+        auxilaryRoom.connectSouth(reactorRoom)
+
+        reactorRoom.connectEast(podsRoom)
+
+        powerDistributionRoom.connectNorth(reactorRoom)
+        powerDistributionRoom.connectSouth(maintenceRoom)
 
 
 
         // Add to rooms list
-        rooms.addAll(listOf(startRoom, securityRoom, weaponsRoom,
-            gardenRoom, engineRoom, alienRoom, trashRoom, labRoom, oRoom))
+        rooms.addAll(listOf(securityRoom, ammunitionDepotRoom, startRoom, weaponsRoom, labRoom, comsRoom, gymRoom,
+            trashRoom, cargoRoom, gardenRoom, alienRoom, meetingRoom, oRoom, engineRoom, cafeRoom, airLockRoom, spaceStorageRoom,
+            medBayRoom, crewQuarterRoom, cryogenicRoom, hangerRoom, auxilaryRoom, reactorRoom, powerDistributionRoom, maintenceRoom,
+            podsRoom))
 
         // Set starting room
         currentRoom = startRoom
@@ -357,49 +421,49 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     }
 
     private fun addControls() {
-        val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 12)
-        val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 16)
+        val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 11)
+        val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 15)
 
         // Room Label
         roomLabel = JLabel("Room Name")
-        roomLabel.bounds = Rectangle(25, 20, 550, 30)
+        roomLabel.bounds = Rectangle(100, 20, 550, 30)
         roomLabel.font = bigFont
         add(roomLabel)
 
         // Description Label (fixed position)
         descriptionLabel = JLabel("Description")
-        descriptionLabel.bounds = Rectangle(25, 60, 550, 100)
+        descriptionLabel.bounds = Rectangle(100, 20, 480, 200)
         descriptionLabel.font = baseFont
         add(descriptionLabel)
 
         // Navigation Buttons
         northButton = JButton("North")
-        northButton.bounds = Rectangle(250, 180, 100, 30)
+        northButton.bounds = Rectangle(170, 220, 110, 40)
         northButton.font = baseFont
         northButton.addActionListener(this)
         add(northButton)
 
         southButton = JButton("South")
-        southButton.bounds = Rectangle(250, 220, 100, 30)
+        southButton.bounds = Rectangle(170, 280, 110, 40)
         southButton.font = baseFont
         southButton.addActionListener(this)
         add(southButton)
 
         eastButton = JButton("East")
-        eastButton.bounds = Rectangle(360, 200, 100, 30)
+        eastButton.bounds = Rectangle(240, 250, 110, 40)
         eastButton.font = baseFont
         eastButton.addActionListener(this)
         add(eastButton)
 
-        westButton = JButton("West")  // Fixed from "Down" to "West"
-        westButton.bounds = Rectangle(140, 200, 100, 30)
+        westButton = JButton("West")
+        westButton.bounds = Rectangle(100, 250, 110, 40)
         westButton.font = baseFont
         westButton.addActionListener(this)
         add(westButton)
 
         // Map Button
         mapButton = JButton("Map")
-        mapButton.bounds = Rectangle(410, 260, 150, 60)
+        mapButton.bounds = Rectangle(410, 280, 100, 40)
         mapButton.font = bigFont
         mapButton.addActionListener(this)
         add(mapButton)
