@@ -75,6 +75,13 @@ class App {
     // All rooms in the game
     private val rooms = mutableListOf<Room>()
 
+    // Constants
+    val MAX_OXYGEN = 8
+    val MIN_OXYGEN = 0
+
+    // Data fields
+    var oxygen = MAX_OXYGEN
+
     init {
         // Initialize/ making the rooms
         val securityRoom = Room(
@@ -296,24 +303,35 @@ class App {
         securityRoom.connectEast(comsRoom)
         securityRoom.connectSouth(ammunitionDepotRoom)
 
+        ammunitionDepotRoom.connectNorth(securityRoom)
+        ammunitionDepotRoom.connectSouth(startRoom)
+
         startRoom.connectNorth(ammunitionDepotRoom)
         startRoom.connectEast(trashRoom)
         startRoom.connectSouth(weaponsRoom)
 
+        weaponsRoom.connectNorth(startRoom)
+        weaponsRoom.connectEast(cargoRoom)
+        weaponsRoom.connectSouth(labRoom)
+
         labRoom.connectNorth(weaponsRoom)
         labRoom.connectEast(gardenRoom)
+
 
         //================================================//
 
         comsRoom.connectEast(alienRoom)
         comsRoom.connectSouth(gymRoom)
 
-        trashRoom.connectNorth(gymRoom)
+        gymRoom.connectEast(meetingRoom)
+        gymRoom.connectSouth(trashRoom)
+
         trashRoom.connectEast(oRoom)
 
-        cargoRoom.connectEast(engineRoom)
         cargoRoom.connectSouth(gardenRoom)
-        cargoRoom.connectWest(weaponsRoom)
+        cargoRoom.connectEast(engineRoom)
+
+        gardenRoom.connectEast(cafeRoom)
 
         //================================================//
 
@@ -327,7 +345,8 @@ class App {
         engineRoom.connectSouth(cafeRoom)
 
         cafeRoom.connectEast(cryogenicRoom)
-        cafeRoom.connectWest(gardenRoom)
+
+
 
         //note gardens north go to cafe MUST FIX
 
@@ -353,6 +372,8 @@ class App {
         powerDistributionRoom.connectNorth(reactorRoom)
         powerDistributionRoom.connectSouth(maintenceRoom)
 
+        maintenceRoom.connectWest(cryogenicRoom)
+
 
 
         // Add to rooms list
@@ -365,7 +386,20 @@ class App {
         currentRoom = startRoom
     }
 
-    fun move(direction: String): String {
+    // Application logic functions
+    fun gainOxygen(amount: Int) {
+        oxygen += amount
+        if (oxygen > MAX_OXYGEN) oxygen = MAX_OXYGEN
+    }
+
+    // Returns true if out of air
+    fun useOxygen(): Boolean {
+        oxygen--
+        if (oxygen == MIN_OXYGEN) return true
+        else return false
+    }
+
+    fun move(direction: String) {
         val newRoom = when(direction.lowercase()) {
             "north" -> currentRoom.north
             "south" -> currentRoom.south
@@ -374,12 +408,17 @@ class App {
             else -> null
         }
 
-        return if (newRoom != null) {
+        if (newRoom != null) {
             currentRoom = newRoom
-            "Moved to ${newRoom.name}"
-        } else {
-            "You can't go that way"
         }
+
+        // Use up some air and see if we have died
+        val outOfAir = useOxygen()
+
+        if(outOfAir) {
+            restartGame()
+        }
+
     }
 
     fun restartGame() {
@@ -388,12 +427,16 @@ class App {
     }
 }
 
+//==============================================================================MAIN WINDOW===========================//
 /**
  * Main UI window (view)
  * Defines the UI and responds to events
  * The app model should be passed as an argument
  */
 class MainWindow(val app: App) : JFrame(), ActionListener {
+    private lateinit var oxygenBackPanel: JPanel
+    private lateinit var oxygenLevelPanel: JPanel
+    //===================================//
     private lateinit var roomLabel: JLabel
     private lateinit var descriptionLabel: JLabel
     private lateinit var mapButton: JButton
@@ -423,6 +466,21 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     private fun addControls() {
         val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 11)
         val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 15)
+
+        // This panel acts as the 'back' of the level meter
+        oxygenBackPanel = JPanel()
+        oxygenBackPanel.bounds = Rectangle(25, 25, 50, 310)
+        oxygenBackPanel.background = Color.LIGHT_GRAY
+        oxygenBackPanel.layout = null                // Want layout to be manual
+        add(oxygenBackPanel)
+
+        // And this one sits inside the one above to make resizing it easier
+        oxygenLevelPanel = JPanel()
+        oxygenLevelPanel.bounds = Rectangle(5, 5, 40, 300)
+        oxygenLevelPanel.background = Color.GRAY
+        oxygenBackPanel.add(oxygenLevelPanel)           // Add this panel inside the other
+
+        //============================================================================//
 
         // Room Label
         roomLabel = JLabel("Room Name")
@@ -473,10 +531,25 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         roomLabel.text = app.currentRoom.name
         descriptionLabel.text = "<html>${app.currentRoom.description}</html>"
 
+        // Update the bar's size
+        val maxHeight = oxygenBackPanel.bounds.height - 8
+        val oxyHeight = calculateOxygenHeight()
+        oxygenLevelPanel.bounds = Rectangle(5, 5 + maxHeight - oxyHeight, 40, oxyHeight )
+
         northButton.isEnabled = app.currentRoom.north != null
         southButton.isEnabled = app.currentRoom.south != null
         eastButton.isEnabled = app.currentRoom.east != null
         westButton.isEnabled = app.currentRoom.west != null
+    }
+
+    /**
+     * Work out the volume bar width based on the parent back panel's width
+     */
+    fun calculateOxygenHeight(): Int {
+        val oxyFraction = app.oxygen.toDouble() / app.MAX_OXYGEN   // Volume from 0.0 to 1.0
+        val maxHeight = oxygenBackPanel.bounds.height - 8                // Size of background panel
+        val oxyHeight = (maxHeight * oxyFraction).toInt()         // Size in px
+        return oxyHeight
     }
 
     override fun actionPerformed(e: ActionEvent) {
@@ -501,6 +574,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         }
     }
 }
+
+//==============================================================================MAP WINDOW============================//
+
 class SubWindow : JFrame() {
     init {
         configureWindow()
@@ -511,56 +587,152 @@ class SubWindow : JFrame() {
 
     private fun configureWindow() {
         title = "Map Of Ship"
-        contentPane.preferredSize = Dimension(750, 450)
+        contentPane.preferredSize = Dimension(695, 350)
         isResizable = false
         layout = null
         pack()
     }
 
     private fun addControls() {
-        val securityMap = JLabel("Security")
-        securityMap.bounds = Rectangle(35, 50, 100, 50)
+        val securityMap = JLabel("")
+        securityMap.bounds = Rectangle(35, 50, 50, 25)
         securityMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(securityMap)
 
+        val ammunitionMap = JLabel("")
+        ammunitionMap.bounds = Rectangle(35, 100, 50, 25)
+        ammunitionMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(ammunitionMap)
+
         val startMap = JLabel("Start")
-        startMap.bounds = Rectangle(35, 150, 100, 50)
+        startMap.bounds = Rectangle(35, 150, 50, 25)
         startMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(startMap)
 
-        val weaponsMap = JLabel("Weapons")
-        weaponsMap.bounds = Rectangle(35, 250, 100, 50)
+        val weaponsMap = JLabel("")
+        weaponsMap.bounds = Rectangle(35, 200, 50, 25)
         weaponsMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(weaponsMap)
 
-        val labMap = JLabel("Lab")
-        labMap.bounds = Rectangle(35, 350, 100, 50)
+        val labMap = JLabel("")
+        labMap.bounds = Rectangle(35, 250, 50, 25)
         labMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(labMap)
 
         //=======================================================================================//
 
-        val comsMap = JLabel("Communications")
-        comsMap.bounds = Rectangle(170, 50, 100, 50)
+        val comsMap = JLabel("")
+        comsMap.bounds = Rectangle(150, 50, 50, 25)
         comsMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(comsMap)
 
-        val trashMap = JLabel("Trash Unit")
-        trashMap.bounds = Rectangle(170, 150, 100, 50)
+        val gymMap = JLabel("")
+        gymMap.bounds = Rectangle(150, 100, 50, 25)
+        gymMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(gymMap)
+
+        val trashMap = JLabel("")
+        trashMap.bounds = Rectangle(150, 150, 50, 25)
         trashMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(trashMap)
 
-        val oxygenMap = JLabel("Oxygen")
-        oxygenMap.bounds = Rectangle(170, 250, 100, 50)
-        oxygenMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
-        add(oxygenMap)
+        val cargoMap = JLabel("")
+        cargoMap.bounds = Rectangle(150, 200, 50, 25)
+        cargoMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(cargoMap)
 
-        val gardenMap = JLabel("Gardens")
-        gardenMap.bounds = Rectangle(170, 350, 100, 50)
+        val gardenMap = JLabel("")
+        gardenMap.bounds = Rectangle(150, 250, 50, 25)
         gardenMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(gardenMap)
 
         //=======================================================================================//
+
+        val alienMap = JLabel("")
+        alienMap.bounds = Rectangle(265, 50, 50, 25)
+        alienMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(alienMap)
+
+        val meetingMap = JLabel("")
+        meetingMap.bounds = Rectangle(265, 100, 50, 25)
+        meetingMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(meetingMap)
+
+        val oxygenMap = JLabel("?")
+        oxygenMap.bounds = Rectangle(265, 150, 50, 25)
+        oxygenMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(oxygenMap)
+
+        val engineMap = JLabel("")
+        engineMap.bounds = Rectangle(265, 200, 50, 25)
+        engineMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(engineMap)
+
+        val cafeMap = JLabel("")
+        cafeMap.bounds = Rectangle(265, 250, 50, 25)
+        cafeMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(cafeMap)
+
+        //=======================================================================================//
+
+        val airLockMap = JLabel("")
+        airLockMap.bounds = Rectangle(380, 50, 50, 25)
+        airLockMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(airLockMap)
+
+        val spaceStorageMap = JLabel("")
+        spaceStorageMap.bounds = Rectangle(380, 100, 50, 25)
+        spaceStorageMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(spaceStorageMap)
+
+        val medBayMap = JLabel("")
+        medBayMap.bounds = Rectangle(380, 150, 50, 25)
+        medBayMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(medBayMap)
+
+        val crewMap = JLabel("")
+        crewMap.bounds = Rectangle(380, 200, 50, 25)
+        crewMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(crewMap)
+
+        val cryoGenMap = JLabel("")
+        cryoGenMap.bounds = Rectangle(380, 250, 50, 25)
+        cryoGenMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(cryoGenMap)
+
+        //=======================================================================================//
+
+        val hangerMap = JLabel("")
+        hangerMap.bounds = Rectangle(495, 50, 50, 25)
+        hangerMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(hangerMap)
+
+        val auxEngineMap = JLabel("")
+        auxEngineMap.bounds = Rectangle(495, 100, 50, 25)
+        auxEngineMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(auxEngineMap)
+
+        val reactorMap = JLabel("")
+        reactorMap.bounds = Rectangle(495, 150, 50, 25)
+        reactorMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(reactorMap)
+
+        val powerMap = JLabel("")
+        powerMap.bounds = Rectangle(495, 200, 50, 25)
+        powerMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(powerMap)
+
+        val maintenanceMap = JLabel("")
+        maintenanceMap.bounds = Rectangle(495, 250, 50, 25)
+        maintenanceMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(maintenanceMap)
+
+        //=======================================================================================//
+
+        val podsMap = JLabel("Pods")
+        podsMap.bounds = Rectangle(610, 150, 50, 25)
+        podsMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
+        add(podsMap)
 
     }
 }
