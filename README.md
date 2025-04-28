@@ -1,4 +1,4 @@
-# PROJECT NAME HERE
+LAST BREATH
 
 by James Black
 
@@ -13,8 +13,6 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 - Self-defined types
 - Using non-core API, library or framework 
 - Using complex data structures (e.g. stacks, queues, trees)
-
-** EDIT LIST ABOVE TO MATCH YOUR PROJECT**
 
 ---
 
