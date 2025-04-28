@@ -7,8 +7,10 @@
  * GitHub Repo: https://github.com/waimea-jmblack/level-3-programming-assesment
  * ---------------------------------------------------------------------
  * Notes:
- * This is a game is about escaping an alien who has boarded your ship, and has killed every last person who once
- * called this ship home, so you have to escape before you lose all your air.
+ * Last Breath is a game is about escaping your spaceship after a predatory alien has boarded your spacecraft
+ * and has killed every person who once called this ship home. Your mission is to navigate through the now destroyed
+ * ship with your minimal oxygen depleting with every step and an unfinished map. But be cautious because if you run
+ * out of oxygen before you get to the escape pods, the alien will achieve its final kill.
  * =====================================================================
  */
 
@@ -68,12 +70,13 @@ class Room(
 }
 
 class App {
-    // Player state
-    var currentRoom: Room
-    var gameOver = false
-
     // All rooms in the game
     private val rooms = mutableListOf<Room>()
+
+    // Player state
+    var currentRoom: Room
+    var oxygenRoom: Room
+    var gameOver = false
 
     // Constants
     val MAX_OXYGEN = 8
@@ -102,11 +105,11 @@ class App {
         )
 
         val startRoom = Room(
-            "The beginning...",
-            "Your head throbs as you stir in the pitch-black command center. Emergency lights flicker, revealing " +
-                    "splattered control panels and toppled chairs. The acrid scent of burnt wiring mixes with something... " +
-                    "organic. A distant, wet shuffling echoes from the corridor outside. You're not supposed to be alive. " +
-                    "And you're definitely not alone.",
+            "LAST BREATH",
+            "Last Breath is a game is about escaping your spaceship after a predatory alien has boarded your space craft " +
+                    "and has killed every person who once called this ship home. Your mission is to navigate through the now destroyed " +
+                    "ship with your minimal oxygen depleting with every step and an unfinished map. But be cautious because if you run out " +
+                    "of oxygen before you get to the escape pods, the alien will achieve its final kill."
         )
 
         val weaponsRoom = Room(
@@ -377,20 +380,26 @@ class App {
 
 
         // Add to rooms list
-        rooms.addAll(listOf(securityRoom, ammunitionDepotRoom, startRoom, weaponsRoom, labRoom, comsRoom, gymRoom,
+        rooms.addAll(listOf(startRoom, ammunitionDepotRoom, securityRoom, weaponsRoom, labRoom, comsRoom, gymRoom,
             trashRoom, cargoRoom, gardenRoom, alienRoom, meetingRoom, oRoom, engineRoom, cafeRoom, airLockRoom, spaceStorageRoom,
             medBayRoom, crewQuarterRoom, cryogenicRoom, hangerRoom, auxilaryRoom, reactorRoom, powerDistributionRoom, maintenceRoom,
             podsRoom))
 
         // Set starting room
         currentRoom = startRoom
+
+        // Remember the oxygen room
+        oxygenRoom = oRoom
     }
 
     // Application logic functions
     fun gainOxygen(amount: Int) {
+
         oxygen += amount
         if (oxygen > MAX_OXYGEN) oxygen = MAX_OXYGEN
     }
+
+    //==========================================Note: Need to make code where if currentRoom = oxygenRoom then +3 oxygen====//
 
     // Returns true if out of air
     fun useOxygen(): Boolean {
@@ -413,17 +422,17 @@ class App {
         }
 
         // Use up some air and see if we have died
-        val outOfAir = useOxygen()
-
-        if(outOfAir) {
-            restartGame()
-        }
+        if (useOxygen()) restartGame()
 
     }
 
     fun restartGame() {
-        gameOver = false
-        currentRoom = rooms.first() // Reset to starting room
+
+        // Reset game state
+        oxygen = MAX_OXYGEN
+        currentRoom = rooms.first()
+
+
     }
 }
 

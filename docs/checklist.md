@@ -22,12 +22,12 @@ The game functions correctly and meets the specification:
 ### Program Code
 
 The program stores data using:
-- [ ] **Variables** of at least two types (e.g. int, text, boolean)
+- [x] **Variables** of at least two types (e.g. int, text, boolean)
 
 The program structure:
-- [ ] Defines and implements a **graphical user interface (GUI)**
+- [x] Defines and implements a **graphical user interface (GUI)**
 - [ ] Makes use of user-defined OOP **classes** from which **objects** are instantiated
-- [ ] Uses **functions** / **methods** to break up the code logically
+- [x] Uses **functions** / **methods** to break up the code logically
 - [ ] Contains **sequences** of instructions
 - [ ] Uses **conditional** instructions to control the program flow
 - [ ] Uses program **branches** (if...else, when, etc.)
