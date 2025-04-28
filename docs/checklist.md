@@ -9,10 +9,10 @@ This checklist can be used to gauge progress towards different levels of success
 ### Program Functionality
 
 The game functions correctly and meets the specification:
-- [ ] The game is **playable**
+- [x] The game is **playable**
 - [x] The game has a **GUI** with a range of controls
 - [ ] The **instructions** for the game are available via the GUI
-- [ ] Player provides game **inputs via the GUI** (e.g. moves, actions)
+- [x] Player provides game **inputs via the GUI** (e.g. moves, actions)
 - [x] The **current status** of the game is **shown in the GUI**, updated each player input
 - [x] The game is based on a **non-trivial map**
 - [x] The player can **move between locations**
@@ -38,14 +38,14 @@ The program structure:
 The program code:
 - [ ] Is **indented** correctly
 - [ ] Is **laid-out clearly**
-- [ ] Contains **comments** that help in understanding how it works
+- [x] Contains **comments** that help in understanding how it works
 
 ### Program Testing
 
 The program has been tested and there is documented evidence that:
 - [ ] The game is **fully functional**, showing testing of:
   - [ ] game setup
-  - [ ] player movement
+  - [x] player movement
   - [ ] other player actions
   - [ ] scoring (if any)
   - [ ] player win / lose states

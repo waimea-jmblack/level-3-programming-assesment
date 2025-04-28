@@ -1,4 +1,4 @@
-# PROJECT NAME HERE
+LAST BREATH
 
 by James Black
 
@@ -14,8 +14,6 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 - Using non-core API, library or framework 
 - Using complex data structures (e.g. stacks, queues, trees)
 
-** EDIT LIST ABOVE TO MATCH YOUR PROJECT**
-
 ---
 
 ## Project Files
@@ -28,5 +26,7 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 
 ## Project Description
 
-**PLACE YOUR PROJECT DESCRIPTION HERE**
+Last Breath is a game is about escaping your spaceship after a predatory alien has boarded your space craft and has killed every person who once called this ship home. 
+Your mission is to navigate through the now destroyed ship with your minimal oxygen depleting with every step and an unfinished map. But be cautious because 
+if you run out of oxygen before you get to the escape pods, the alien will achieve its final kill.  
 
