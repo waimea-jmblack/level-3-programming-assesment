@@ -76,10 +76,10 @@ class App {
     // Player state
     var currentRoom: Room
     var oxygenRoom: Room
-    var gameOver = false
+    var finishRoom: Room
 
     // Constants
-    val MAX_OXYGEN = 8
+    val MAX_OXYGEN = 5
     val MIN_OXYGEN = 0
 
     // Data fields
@@ -181,9 +181,11 @@ class App {
 
         val oRoom = Room(
             "Oxygen Room",
-            "Thankfully the backup O2 generators are still running—weak, sputtering, but alive. The main systems" +
-                    " are fried, vents clogged with something dark and fibrous. A flickering screen reports steady depletion: " +
-                    "23% and falling. Every breath feels like my last.  "
+            "The backup O2 generators sputter to life as you enter, their weak but steady hum a temporary reprieve " +
+                    "from the ship's death rattle. The main systems are still fried, vents clogged with strands of something dark " +
+                    "and fibrous that pulses when you're not looking. A flickering screen reports your oxygen reserves increasing - " +
+                    "just enough to matter, not enough to survive. Across the room, a shattered visor lies in a pool of frozen " +
+                    "breath, a reminder that not everyone got this second chance. Though this was only a one time opportunity."
         )
 
         val engineRoom = Room(
@@ -242,21 +244,21 @@ class App {
             "The reinforced pods are scarred with claw marks—not random, but methodical, like a predator testing each cell for " +
                     "worthy prey. Most remain sealed, their occupants deemed unworthy. Pod-12’s shattered exterior tells a different story: " +
                     "frost-coated bones and mangled combat armor spill from the rupture. The terminal’s last log glitches on repeat: ‘COMBAT " +
-                    "SPECIMEN REJECTED. FAILURE: ████ MINUTES.’ The alien didn’t just hunt here… it held auditions."
+                    "SPECIMEN REJECTED. FAILURE: ████ MINUTES.’ The alien didn't just hunt here… it held auditions."
         )
 
         //=====================================================================================================//
 
-        val maintenceRoom = Room(
-            "Maintence",
+        val maintenanceRoom = Room(
+            "Maintenance",
             "The drones never stood a chance. Their shattered chassis litter the floor—some torn in half, others crushed into the " +
                     "grating with terrifying force. A few still twitch, their broken servos whining as they pointlessly drag themselves in circles. " +
                     "The emergency repair terminal flickers with a single, repeating alert: 'CRITICAL DAMAGE DETECTED " +
                     "IN SECTOR—' before cutting to static."
         )
 
-        val auxilaryRoom = Room(
-            "Auxilary Engineering",
+        val auxiliaryRoom = Room(
+            "Auxiliary Engineering",
             "The backup systems hum—wrong. Too smooth. Too quiet. The panels are flawless. No damage. No blood. Just... rewired. " +
                     "Your name blinks on the maintenance logs for work you never did. The temperature drops exactly when you notice the new " +
                     "piping—shaped like veins. The ship’s AI whispers: 'All systems nominal.' The lie echoes in the dark. You don’t remember " +
@@ -296,7 +298,7 @@ class App {
             "The pod’s hatch glows just ahead—safety. But the thunder of claws on metal shakes the walls. Closer. " +
                     "Louder. You slam the release button. The door hisses shut. A shadow fills the viewport. Not a monster. " +
                     "Something worse. Something knowing. Its eyes lock onto yours as the pod detaches. The last thing you see isn’t " +
-                    "teeth or claws—it’s the thing smiling as you escape. Like this was always the plan."
+                    "teeth or claws—it’s the thing smiling as you escape. Like this was always the plan. You have ESCAPED"
         )
 
 
@@ -312,6 +314,7 @@ class App {
         startRoom.connectNorth(ammunitionDepotRoom)
         startRoom.connectEast(trashRoom)
         startRoom.connectSouth(weaponsRoom)
+        trashRoom.connectSouth(cargoRoom)
 
         weaponsRoom.connectNorth(startRoom)
         weaponsRoom.connectEast(cargoRoom)
@@ -328,8 +331,6 @@ class App {
 
         gymRoom.connectEast(meetingRoom)
         gymRoom.connectSouth(trashRoom)
-
-        trashRoom.connectEast(oRoom)
 
         cargoRoom.connectSouth(gardenRoom)
         cargoRoom.connectEast(engineRoom)
@@ -349,40 +350,36 @@ class App {
 
         cafeRoom.connectEast(cryogenicRoom)
 
-
-
-        //note gardens north go to cafe MUST FIX
-
         //================================================//
 
         airLockRoom.connectEast(hangerRoom)
         airLockRoom.connectSouth(spaceStorageRoom)
 
-        spaceStorageRoom.connectEast(auxilaryRoom)
+        spaceStorageRoom.connectEast(auxiliaryRoom)
         spaceStorageRoom.connectSouth(medBayRoom)
 
         crewQuarterRoom.connectNorth(medBayRoom)
         crewQuarterRoom.connectEast(powerDistributionRoom)
-        crewQuarterRoom.connectSouth(cryogenicRoom)
+
+        cryogenicRoom.connectNorth(crewQuarterRoom)
+        cryogenicRoom.connectEast(maintenanceRoom)
+
 
         //================================================//
 
-        auxilaryRoom.connectNorth(hangerRoom)
-        auxilaryRoom.connectSouth(reactorRoom)
+        auxiliaryRoom.connectNorth(hangerRoom)
+        auxiliaryRoom.connectSouth(reactorRoom)
 
         reactorRoom.connectEast(podsRoom)
 
-        powerDistributionRoom.connectNorth(reactorRoom)
-        powerDistributionRoom.connectSouth(maintenceRoom)
-
-        maintenceRoom.connectWest(cryogenicRoom)
+        powerDistributionRoom.connectSouth(maintenanceRoom)
 
 
 
         // Add to rooms list
         rooms.addAll(listOf(startRoom, ammunitionDepotRoom, securityRoom, weaponsRoom, labRoom, comsRoom, gymRoom,
             trashRoom, cargoRoom, gardenRoom, alienRoom, meetingRoom, oRoom, engineRoom, cafeRoom, airLockRoom, spaceStorageRoom,
-            medBayRoom, crewQuarterRoom, cryogenicRoom, hangerRoom, auxilaryRoom, reactorRoom, powerDistributionRoom, maintenceRoom,
+            medBayRoom, crewQuarterRoom, cryogenicRoom, hangerRoom, auxiliaryRoom, reactorRoom, powerDistributionRoom, maintenanceRoom,
             podsRoom))
 
         // Set starting room
@@ -390,16 +387,16 @@ class App {
 
         // Remember the oxygen room
         oxygenRoom = oRoom
+
+        // Set Finishing Room (Pods)
+        finishRoom = podsRoom
     }
 
     // Application logic functions
     fun gainOxygen(amount: Int) {
-
         oxygen += amount
         if (oxygen > MAX_OXYGEN) oxygen = MAX_OXYGEN
     }
-
-    //==========================================Note: Need to make code where if currentRoom = oxygenRoom then +3 oxygen====//
 
     // Returns true if out of air
     fun useOxygen(): Boolean {
@@ -408,8 +405,12 @@ class App {
         else return false
     }
 
+    private var hasUsedORoom = false  // Tracks if oxygen room was used
+    private var enterFinishRoom = false // Tracks if player enters Finish. //========= seek can you please make this work
+
     fun move(direction: String) {
         val newRoom = when(direction.lowercase()) {
+
             "north" -> currentRoom.north
             "south" -> currentRoom.south
             "east" -> currentRoom.east
@@ -418,21 +419,46 @@ class App {
         }
 
         if (newRoom != null) {
+            val enteredORoom = (newRoom == oxygenRoom && !hasUsedORoom)
+            val enteredFinishRoom = (newRoom == finishRoom)
+
             currentRoom = newRoom
+
+            // Special Rooms
+
+            // Apply the oxygen bonus BEFORE normal oxygen use
+            if (enteredORoom) {
+                gainOxygen(3)
+                hasUsedORoom = true
+                return  // Skip oxygen use this turn
+            }
+
+            if (enteredFinishRoom) {
+                enterFinishRoom = true
+                // You can handle win condition here or check hasPlayerWon() elsewhere
+                return  // Skip oxygen use
+            }
         }
 
-        // Use up some air and see if we have died
-        if (useOxygen()) restartGame()
-
+        // oxygen usage
+        if (useOxygen()) {
+            restartGame()
+        }
     }
 
-    fun restartGame() {
+    //===============================================Player part not done======//
 
+    fun hasPlayerWon(): Boolean {
+        return enterFinishRoom
+    }
+
+
+    fun restartGame() {
         // Reset game state
         oxygen = MAX_OXYGEN
+        hasUsedORoom = false
+        enterFinishRoom = false
         currentRoom = rooms.first()
-
-
     }
 }
 
@@ -667,7 +693,7 @@ class SubWindow : JFrame() {
         meetingMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(meetingMap)
 
-        val oxygenMap = JLabel("?")
+        val oxygenMap = JLabel("")
         oxygenMap.bounds = Rectangle(265, 150, 50, 25)
         oxygenMap.border = BorderFactory.createLineBorder(Color.GRAY, 3)
         add(oxygenMap)
