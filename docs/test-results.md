@@ -5,10 +5,17 @@ The test results show the actual outcome of the testing, following the [Test Pla
 ---
 
 ## Movement
+
 In the video, I tested the player's movement mechanics around the game map, making sure there was smooth navigation between the interconnected rooms. Additionally, I made sure that paths leading to non-existent rooms were blocked to prevent the player from accessing them. This ensures the game world remains a challenge and prevents them from getting stuck or unintended exploration.
 
 ## Test Data Used
+
 Movement is the core mechanic of my game, making this the most important test. I made sure that functionality of the North, South, East, and West directional buttons respond correctly and move the player between rooms as intended.
+
+
+In this test I am testing the movement of my game. There will be tests to dicatate weather the user can move north, south, east and west. I will also be making sure that
+any rooms that do not connect to the room the player is in, is cut off/ buttons disabled.
+
 
 ## Test Result
 ![Movement.gif](screenshots/Movement.gif)
@@ -32,6 +39,7 @@ Oxygen Refill: Carefully tested the oxygen room use/ functionality to prevent in
 The oxygen system worked as intended. The refill room gives the player +3 oxygen but only once, eliminating a potential gameplay loophole. This balance ensures that it is still a challenge and introduces strategy into the game.
 
 ---
+
 
 ## Map
 To enhance player immersion and navigation, I implemented a small, low-detail map. This design choice avoids confusing the player too much while providing just enough of a challenge to traverse the ship.
@@ -60,3 +68,10 @@ Pop-up Display: Verified visibility and messaging (e.g., "Mission Successful").
 The pop-up appeared as it was supposed too, delivering a hopefully satisfying ending. Without it, players might feel uncertain about weather they finished, so it is vital for this to be there.
 
 ---
+
+
+
+
+
+
+
