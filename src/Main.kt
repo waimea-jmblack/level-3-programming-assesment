@@ -13,6 +13,7 @@
  * out of oxygen before you get to the escape pods, the alien will achieve its final kill.
  * =====================================================================
  */
+
 /**
  * Launch the application
  */
@@ -23,7 +24,6 @@ import javax.swing.*
 /**
  * Creating a class
  */
-
 fun main() {
     FlatDarkLaf.setup()
     val app = App()
@@ -35,7 +35,6 @@ fun main() {
  * This is the place where any application data should be
  * stored, plus any application logic functions
  */
-
 class Room(
     val name: String,
     val description: String,
@@ -66,12 +65,14 @@ class Room(
     }
 }
 
+//Creating the game.
 class App {
     private val rooms = mutableListOf<Room>()
     var currentRoom: Room
     var oxygenRoom: Room
     var finishRoom: Room
 
+    //Setting the max and min oxygen levels.
     val MAX_OXYGEN = 5
     val MIN_OXYGEN = 0
     var oxygen = MAX_OXYGEN
@@ -79,6 +80,7 @@ class App {
     private var hasUsedORoom = false
     private var enterFinishRoom = false
 
+    //Room Descriptions
     init {
         // Initialize all the rooms
         val securityRoom = Room(
@@ -296,7 +298,7 @@ class App {
                     "teeth or claws—it’s the thing smiling as you escape. Like this was always the plan. You have ESCAPED"
         )
 
-        // Connect all rooms (0.0)
+        // Connections between different rooms of the game
         securityRoom.connectEast(comsRoom)
         securityRoom.connectSouth(ammunitionDepotRoom)
         ammunitionDepotRoom.connectNorth(securityRoom)
@@ -337,7 +339,7 @@ class App {
         reactorRoom.connectEast(podsRoom)
         powerDistributionRoom.connectSouth(maintenanceRoom)
 
-        // Add all rooms to list
+        // Add all rooms to the game and list.
         rooms.addAll(listOf(
             startRoom, ammunitionDepotRoom, securityRoom, weaponsRoom, labRoom, comsRoom, gymRoom,
             trashRoom, cargoRoom, gardenRoom, alienRoom, meetingRoom, oRoom, engineRoom, cafeRoom,
@@ -345,21 +347,25 @@ class App {
             auxiliaryRoom, reactorRoom, powerDistributionRoom, maintenanceRoom, podsRoom
         ))
 
+        //Special Rooms that preform a function (Starting, Finishing and Extra Oxygen).
         currentRoom = startRoom
         oxygenRoom = oRoom
         finishRoom = podsRoom
     }
 
+    //Function that lets the player gain oxygen.
     fun gainOxygen(amount: Int) {
         oxygen += amount
         if (oxygen > MAX_OXYGEN) oxygen = MAX_OXYGEN
     }
 
+    //Each step the player loses some oxygen.
     fun useOxygen(): Boolean {
         oxygen--
         return oxygen <= MIN_OXYGEN
     }
 
+    //Movement Keys.
     fun move(direction: String) {
         val newRoom = when(direction.lowercase()) {
             "north" -> currentRoom.north
@@ -369,28 +375,34 @@ class App {
             else -> null
         }
 
+        //Player entering into a new room.
         if (newRoom != null) {
             currentRoom = newRoom
 
+            //If the new room = Oxygen room, the player gains +3 oxygen.
             if (newRoom == oxygenRoom && !hasUsedORoom) {
                 gainOxygen(3)
                 hasUsedORoom = true
                 return
             }
 
+            //Checking if the player enters the Pods room/ Finish room and finish game.
             if (newRoom == finishRoom) {
                 enterFinishRoom = true
                 return
             }
         }
 
+        //Code for when the player runs out of oxygen, the game restarts.
         if (useOxygen()) {
             restartGame()
         }
     }
 
+    //Function for checking if the player has entered the pods room = finished the game.
     fun hasPlayerWon(): Boolean = enterFinishRoom
 
+    //Function that plays to restart the game (Resets everything).
     fun restartGame() {
         oxygen = MAX_OXYGEN
         hasUsedORoom = false
@@ -399,6 +411,7 @@ class App {
     }
 }
 
+//This is the main gameplay window.
 class MainWindow(val app: App) : JFrame(), ActionListener {
     private lateinit var oxygenBackPanel: JPanel
     private lateinit var oxygenLevelPanel: JPanel
@@ -418,6 +431,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         isVisible = true
     }
 
+    //Configuration of the main window (Height, Name etc.).
     private fun configureWindow() {
         title = "Last Breath"
         contentPane.preferredSize = Dimension(600, 350)
@@ -427,6 +441,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         pack()
     }
 
+    //Controls and Ui styling.
     private fun addControls() {
         val baseFont = Font(Font.SANS_SERIF, Font.BOLD, 11)
         val bigFont = Font(Font.SANS_SERIF, Font.BOLD, 15)
@@ -483,6 +498,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         add(mapButton)
     }
 
+    //This function is used to update the Ui and to disable certain buttons depending on the room the player is in.
     fun updateView() {
         roomLabel.text = app.currentRoom.name
         descriptionLabel.text = "<html>${app.currentRoom.description}</html>"
@@ -496,6 +512,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         eastButton.isEnabled = app.currentRoom.east != null
         westButton.isEnabled = app.currentRoom.west != null
 
+        //These are the pop-up windows that are meant to pop up when you either win or lose (Only the win one works :o)
         if (app.hasPlayerWon()) {
             JOptionPane.showMessageDialog(this, "You escaped! Congratulations!", "Game Over", JOptionPane.INFORMATION_MESSAGE)
             dispose()
@@ -505,6 +522,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         }
     }
 
+    //When an action is inputted/ preformed by the user the ui is updated to display the new elements (New room, disabled controls etc.).
     override fun actionPerformed(e: ActionEvent) {
         when (e.source) {
             mapButton -> SubWindow().isVisible = true
@@ -516,6 +534,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     }
 }
 
+//This is the map window configuration
 class SubWindow : JFrame() {
     init {
         configureWindow()
@@ -524,6 +543,7 @@ class SubWindow : JFrame() {
         isVisible = false
     }
 
+    //Map window sizing and name configuration.
     private fun configureWindow() {
         title = "Map Of Ship"
         contentPane.preferredSize = Dimension(695, 350)
@@ -532,6 +552,7 @@ class SubWindow : JFrame() {
         pack()
     }
 
+    //This is for creating the visuals of the map (The boxes)
     private fun addControls() {
         val securityMap = JLabel("Security")
         securityMap.bounds = Rectangle(35, 50, 50, 25)

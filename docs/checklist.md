@@ -11,13 +11,13 @@ This checklist can be used to gauge progress towards different levels of success
 The game functions correctly and meets the specification:
 - [x] The game is **playable**
 - [x] The game has a **GUI** with a range of controls
-- [ ] The **instructions** for the game are available via the GUI
+- [x] The **instructions** for the game are available via the GUI
 - [x] Player provides game **inputs via the GUI** (e.g. moves, actions)
 - [x] The **current status** of the game is **shown in the GUI**, updated each player input
 - [x] The game is based on a **non-trivial map**
 - [x] The player can **move between locations**
 - [x] The player has a **clear purpose** they can attempt to achieve
-- [ ] A **win / end / loss state** is possible
+- [x] A **win / end / loss state** is possible
 
 ### Program Code
 
@@ -26,9 +26,9 @@ The program stores data using:
 
 The program structure:
 - [x] Defines and implements a **graphical user interface (GUI)**
-- [ ] Makes use of user-defined OOP **classes** from which **objects** are instantiated
+- [x] Makes use of user-defined OOP **classes** from which **objects** are instantiated
 - [x] Uses **functions** / **methods** to break up the code logically
-- [ ] Contains **sequences** of instructions
+- [x] Contains **sequences** of instructions
 - [ ] Uses **conditional** instructions to control the program flow
 - [ ] Uses program **branches** (if...else, when, etc.)
 - [ ] Uses **iteration** (loops) to repeat things (for, while, etc.)
